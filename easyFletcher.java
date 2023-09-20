@@ -36,7 +36,7 @@ public class easyFletcher extends LoopScript {
     }
 
     public void sendContinue() {
-        System.out.println("sendtext <num> false");
+        System.out.println("Sending Keyboard Option 3");
         getAPIContext().keyboard().sendText("3", false);
     }
 
@@ -147,21 +147,21 @@ public class easyFletcher extends LoopScript {
         boolean prepped = false;
 
         if (shouldBank()) {
-
             openBank();
-
-            if ((itemAmtInInventory("Knife")) == 1) {
-                depositBows();
-                withdrawXItems(27, "Maple logs");
-                closeBank();
-                prepped = true;
-            } else {
+            
+            int knifeCount = itemAmtInInventory("Knife");
+        
+            if (knifeCount != 1) {
                 depositAll();
                 withdrawXItems(1, "Knife");
-                withdrawXItems(27, "Maple logs");
-                closeBank();
-                prepped = true;
+            } else {
+                depositBows();
             }
+            
+            withdrawXItems(27, "Maple logs");
+            
+            closeBank();
+            prepped = true;
         }
 
         if ((prepped) && (shouldFletch())) {
@@ -176,7 +176,7 @@ public class easyFletcher extends LoopScript {
 
             while (timeElapsed < fletchTime) {
                 timeElapsed++;
-                if ((timeElapsed % 1800) == 0) {
+                if (timeElapsed % 1800 == 0) {
                     Time.sleep(1800);
                     doMsg("timeElapsed: " + String.valueOf(timeElapsed) + "ms slept.");
                     addStats();
